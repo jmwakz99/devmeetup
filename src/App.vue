@@ -1,32 +1,83 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
-  </div>
+  <v-app>
+    <v-navigation-drawer temporary app v-model="sidenav">
+      <v-list dense>
+        <v-list-item
+          :to="item.link"
+          link
+          v-for="item in menuItems"
+          :key="item.title"
+        >
+          <v-list-item-action>
+            <v-icon>{{ item.icon }}</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+    </v-navigation-drawer>
+    <v-app-bar dark app class="primary">
+      <v-app-bar-nav-icon
+        @click.stop="sidenav = !sidenav"
+        class="hidden-sm-and-up"
+      ></v-app-bar-nav-icon>
+      <router-link to="/" tag="span" style="cursor: pointer"
+        >DevMeetup</router-link
+      >
+
+      <v-spacer></v-spacer>
+      <div class="hidden-xs-only">
+        <v-btn :to="item.link" text v-for="item in menuItems" :key="item.title">
+          <v-icon left>{{ item.icon }}</v-icon>
+          {{ item.title }}
+        </v-btn>
+      </div>
+    </v-app-bar>
+
+    <v-main>
+      <router-view></router-view>
+    </v-main>
+  </v-app>
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+export default {
+  name: "App",
 
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
-</style>
+  data: () => ({
+    //
+    sidenav: false
+  }),
+  computed: {
+    menuItems() {
+      let menuItems = [
+        { icon: "mdi-face", title: "Sign up", link: "/signup" },
+        { icon: "mdi-lock", title: "Sign in", link: "/signin" }
+      ];
+      if (this.userIsAuthenticated) {
+        menuItems = [
+          {
+            icon: "mdi-account-supervisor",
+            title: "View Meetups",
+            link: "/meetups"
+          },
+          {
+            icon: "mdi-map-marker",
+            title: "Organize Meetup",
+            link: "/meetup/new"
+          },
+          { icon: "mdi-account", title: "Profile", link: "/profile" }
+        ];
+      }
+      return menuItems;
+    },
+    userIsAuthenticated() {
+      return (
+        this.$store.getters.user !== null &&
+        this.$store.getters.user !== undefined
+      );
+    }
+  }
+};
+</script>
