@@ -2,13 +2,18 @@
   <v-container>
     <v-row class="mb-2">
       <v-col xs="12" sm="6" class="text-center text-sm-right">
-        <v-btn large to="/meetups" class>Explore Meetups</v-btn>
+        <v-btn large to="/meetups" class="info">Explore Meetups</v-btn>
       </v-col>
       <v-col xs="12" sm="6" class="text-center text-sm-left">
         <v-btn large to="/meetup/new" class="info">Organize Meetup</v-btn>
       </v-col>
     </v-row>
-    <v-row class="mt-2">
+    <v-row>
+      <v-col xs="12" class="text-center">
+        <v-progress-circular indeterminate color="red" :width="7" :size="70" v-if="loading"></v-progress-circular>
+      </v-col>
+    </v-row>
+    <v-row class="mt-2" v-if="!loading">
       <v-col xs="12">
         <v-carousel style="cursor: pointer">
           <v-carousel-item
@@ -38,6 +43,9 @@ export default {
   computed: {
     meetups() {
       return this.$store.getters.featuredMeetups;
+    },
+    loading() {
+      return this.$store.getters.loading;
     },
   },
   methods: {

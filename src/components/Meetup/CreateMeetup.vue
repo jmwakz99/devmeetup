@@ -26,13 +26,12 @@
           </v-row>
           <v-row>
             <v-col xs="12" sm="6" offset-sm="3">
-              <v-text-field
-                name="imageUrl"
-                id="imageUrl"
-                v-model="imageUrl"
-                label="Image URL"
-                required
-              ></v-text-field>
+              <v-file-input
+                label="Upload your image"
+                prepend-icon="mdi-camera"
+                @change="onFilePicked"
+                accept="image/*"
+              ></v-file-input>
             </v-col>
           </v-row>
           <v-row>
@@ -90,6 +89,7 @@ export default {
       description: "",
       datePicker: new Date().toISOString().substr(0, 10),
       timePicker: new Date(),
+      image: null,
     };
   },
   computed: {
@@ -121,15 +121,34 @@ export default {
       if (!this.formIsValid) {
         return;
       }
+      if (!this.image) {
+        return;
+      }
       const meetupData = {
         title: this.title,
         location: this.location,
-        imageUrl: this.imageUrl,
+        image: this.image,
         description: this.description,
         date: this.submittableDateTime,
       };
       this.$store.dispatch("createMeetup", meetupData);
       this.$router.push("/meetups");
+    },
+    onFilePicked(event) {
+      const filename = event.name;
+      if (filename.lastIndexOf(".") <= 0) {
+        return alert("Please add a valid file");
+      }
+      const fileReader = new FileReader();
+
+      fileReader.addEventListener("load", () => {
+        this.imageUrl = fileReader.result;
+        console.log("yes");
+      });
+
+      fileReader.readAsDataURL(event);
+      this.image = event;
+      console.log(this.image);
     },
   },
 };
