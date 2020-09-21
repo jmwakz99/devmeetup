@@ -17,11 +17,23 @@
           <v-img height="400px" :src="meetup.imageUrl"></v-img>
           <v-card-text>
             <div class="info--text">{{meetup.date | date }}- {{meetup.location}}</div>
+            <v-row>
+              <v-col xs="6" sm="2" md="2">
+                <app-edit-meetup-date-dialog :meetup="meetup" :userIsCreator="userIsCreator"></app-edit-meetup-date-dialog>
+              </v-col>
+              <v-col xs="6" sm="2" md="2">
+                <app-edit-meetup-time-dialog :meetup="meetup" :userIsCreator="userIsCreator"></app-edit-meetup-time-dialog>
+              </v-col>
+            </v-row>
+
             <div>{{meetup.description}}</div>
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn class="primary">Register</v-btn>
+            <app-meetup-register-dialog
+              v-if="userIsAuthenticated && !userIsCreator"
+              :meetupId="meetup.id"
+            ></app-meetup-register-dialog>
           </v-card-actions>
         </v-card>
       </v-col>

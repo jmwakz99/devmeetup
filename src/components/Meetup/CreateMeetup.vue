@@ -57,14 +57,14 @@
           </v-row>
           <v-row class="mb-2">
             <v-col xs="12" sm="6" offset-sm="3">
-              <v-date-picker v-model="datePicker"></v-date-picker>
+              <v-date-picker elevation="2" v-model="datePicker"></v-date-picker>
               <br />
             </v-col>
           </v-row>
 
           <v-row>
             <v-col xs="12" sm="6" offset-sm="3">
-              <v-time-picker ampm-in-title v-model="timePicker"></v-time-picker>
+              <v-time-picker elevation="2" format="24hr" ampm-in-title v-model="timePicker"></v-time-picker>
               <br />
             </v-col>
           </v-row>
